@@ -1,10 +1,10 @@
 package com.example.mgnt_sys.service;
 
-import com.example.mgnt_sys.model.Form;
+import com.example.mgnt_sys.model.Book;
 import com.example.mgnt_sys.repository.BookRepository;
 
-import org.springframework.scheduling.config.Task;
-import org.springframework.stereotype.Service;
+/*import org.springframework.scheduling.config.Task;
+import org.springframework.stereotype.Service;*/
 import java.util.List;
 import java.util.Optional;
 
@@ -12,27 +12,27 @@ public class BookService {
     private final BookRepository bookRepository;
 
     public BookService(BookRepository bookRepository){
-        this.formRepository=formRepository;
+        this.bookRepository=bookRepository;
     }
 
-    public List<Booku> getAllBookus(){
+    public List<Book> getAllBooks(){
         return bookRepository.findAll();
     }
-    public Optional<Booku> getBookuById(Long id){
+    public Optional<Book> getBookuById(Long id){
         return bookRepository.findById(id);
     }
-    public Booku addBooku(Booku Booku){
-        return bookRepository.save(Booku);
+    public Book addBooku(Book book){
+        return bookRepository.save(book);
     }
 
-    public Optional<Task> updateTaskStatus(Long id, boolean completed){
-        return bookRepository.findById(id).map(Booku -> {
-            Booku.setCompleted(completed);
-            return bookRepository.save(Booku);
+    public Optional<Book> updateBookStatus(Long id, boolean completed){
+        return bookRepository.findById(id).map(Book -> {
+            Book.setCompleted(completed);
+            return bookRepository.save(Book);
         });
     }
 
-    public void deleteBooku(Long id){
-        BookuRepository.deleteById(id);
+    public void deleteBook(Long id){
+        bookRepository.deleteById(id);
     }
 }

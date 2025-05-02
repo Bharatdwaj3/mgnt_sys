@@ -14,17 +14,19 @@ public class FormService {
         this.formRepository=formRepository;
     }
 
-    public List<User> getAllUsers(){
+    
+
+    public List<Form> getAllUsers(){
         return formRepository.findAll();
     }
-    public Optional<User> getUserById(Long id){
+    public Optional<Form> getUserById(Long id){
         return formRepository.findById(id);
     }
-    public User addUser(User user){
-        return formRepository.save(user);
+    public Form addUser(Form form){
+        return formRepository.save(form);
     }
 
-    public Optional<Task> updateTaskStatus(Long id, boolean completed){
+    public Optional<Form> updateTaskStatus(Long id, boolean completed){
         return formRepository.findById(id).map(user -> {
             user.setCompleted(completed);
             return formRepository.save(user);
@@ -32,6 +34,6 @@ public class FormService {
     }
 
     public void deleteUser(Long id){
-        userRepository.deleteById(id);
+        formRepository.deleteById(id);
     }
 }

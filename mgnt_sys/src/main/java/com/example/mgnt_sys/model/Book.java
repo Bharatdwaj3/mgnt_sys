@@ -3,7 +3,18 @@ package com.example.mgnt_sys.model;
 import java.util.HashMap;
 import java.util.Map;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "book")
 public class Book {
+     @Id 
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
+        private Long id;
     private String 
         book_name,
         book_genre,
@@ -13,6 +24,18 @@ public class Book {
     private int 
         book_pages,
         book_isbn;
+
+    private boolean completed;
+    
+    public boolean isCompleted(){
+        return completed;
+    }
+
+    public void setCompleted(boolean completed){
+        this.completed=completed;
+    }
+
+
 
     public Map<String, Object> getBook_Details(){
         Map<String, Object> details = new HashMap<>();

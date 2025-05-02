@@ -4,15 +4,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "user")
 public class Form {
         
         @Id 
         @GeneratedValue(strategy = GenerationType.IDENTITY)
+        
         private Long id;
-
         private String firstname,lastname, country, subject;
+        private boolean completed;
 
         public String getFirstName(){
             return firstname;
@@ -27,6 +30,13 @@ public class Form {
             return subject;
         }
 
+        public boolean isCompleted() {
+            return completed;
+        }
+
+        public void setCompleted(boolean completed) {
+            this.completed = completed;
+        }
 
          public void setFirstName(String firstname){
             this.firstname=firstname;
