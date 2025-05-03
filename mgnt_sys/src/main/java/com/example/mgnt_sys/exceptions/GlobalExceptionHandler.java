@@ -10,8 +10,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ResponseEntity<Object> handleTaskNotFound(TaskNotFoundException ex) {
-        // You can customize this error message or structure it in a better way.
+    public ResponseEntity<Object> handleTaskNotFound(UserNotFoundException ex) {
+        return new ResponseEntity<>(new ErrorDetails("Task Not Found", ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BookNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleTaskNotFound(BookNotFoundException ex) {
         return new ResponseEntity<>(new ErrorDetails("Task Not Found", ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 

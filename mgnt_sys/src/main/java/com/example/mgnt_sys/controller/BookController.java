@@ -1,39 +1,52 @@
 package com.example.mgnt_sys.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.GetMapping;
-/*import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;*/
+import org.springframework.beans.factory.annotation.Autowired;
+
+
 import org.springframework.stereotype.Controller;
 
 import com.example.mgnt_sys.model.Book;
-
-import java.util.Map;
+import com.example.mgnt_sys.repository.BookRepository;
 
 @Controller
 public class BookController {
+
+     @Autowired
+    private BookRepository bookRepository;
+
     @GetMapping("/book")
     public String getBook(){
-        return "book";
+        return "redirect:/book.html";
     }
-    @PostMapping("/sumbit_book")
+    @PostMapping("/submitBook")
     @ResponseBody
     public String handleBookSumbmission(
-        @RequestBody Map<String, Object> bookData){
-            String book_name=(String) bookData.get("book_name");
-            String book_genre=(String) bookData.get("book_genre");
-            String book_file_format=(String) bookData.get("book_fileformat");
-            String book_writer=(String) bookData.get("book_writer");
-            String book_publisher=(String) bookData.get("book_publisher");
-            Integer book_pages=(Integer) bookData.get("book_book_pages");
-            Integer book_isbn=(Integer) bookData.get("isbn");
-
+            
+            @RequestParam("name") String bookName,
+            @RequestParam("genre") String bookGenre,
+            @RequestParam("format") String bookFileFormat,
+            @RequestParam("writer") String bookWriter,
+            @RequestParam("publisher") String bookPublisher,
+            @RequestParam("pages") Integer bookPages,
+            @RequestParam("isbn") Integer bookISBN
+    ){
             Book book = new Book();
-            book.setBookDetails(bookData);
+            book.setBookName(bookName);
+            book.setBookGenre(bookGenre);
+            book.setBookFileFormat(bookFileFormat);
+            book.setBookWriter(bookWriter);
+            book.setBookPublisher(bookPublisher);
+            book.setBookPages(bookPages);
+            book.setBookISBN(bookISBN);
+            book.setCompleted(false);
 
-            return "Book sumbitted: " + book.getBook_Details().toString();
+            bookRepository.save(book);
+                        
+
+            return bookName + " by "  + bookWriter +   "is sumbitted as a " +  bookFileFormat +  " of " +  bookPages + " pages and an ISBN id " + bookISBN ;
     } 
 }
