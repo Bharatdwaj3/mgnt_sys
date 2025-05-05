@@ -4,19 +4,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.example.mgnt_sys.model.Form;
-import com.example.mgnt_sys.repository.FormRepository;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+
+import com.example.mgnt_sys.model.User;
+import com.example.mgnt_sys.repository.UserRepository;
+
+import org.springframework.stereotype.Controller;
+
+@Controller
 public class UserController {
 
     @Autowired
-    private FormRepository formRepository;
+    private UserRepository userRepository;
 
     @GetMapping("/register")
     public String getForm() {
-        return "redirect:/form.html";
+        return "redirect:/register.html";
     }
 
     @GetMapping("/login")
@@ -25,27 +35,57 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String getLogout() {
+    public String getLogout(HttpServletResponse res) {
+        Cookie cookie = new Cookie("userSession",null);
+        cookie.setMaxAge(0);
+        cookie.setPath("/");
+        res.addCookie(cookie);
         return "redirect:/logout.html";
     }
 
-    @PostMapping("/submit")
+    @PostMapping("/submita")
     @ResponseBody
     public String handleFormSubmission(
-            @RequestParam String firstname,
-            @RequestParam String lastname,
-            @RequestParam String country,
-            @RequestParam String subject) {
+            @RequestParam String name,
+            @RequestParam String username,
+            @RequestParam String email,
+            @RequestParam String password) {
 
-        Form data = new Form();
-        data.setFirstName(firstname);
-        data.setLastName(lastname);
-        data.setCountry(country);
-        data.setSubject(subject);
+        User data = new User();
+        data.setName(name);
+        data.setUsername(username);
+        data.setEmail(email);
+        data.setPassword(password);
 
-        formRepository.save(data);
+        userRepository.save(data);
 
-        return "Form Sumbitted!! --> \nFirst Name: " + firstname + ", Last Name: " + lastname + " Country : " + country
-                + " subject : " + subject;
+        return "Form Sumbitted!! --> \nFirst Name: " + name + ", Last Name: " + username + " email : " + email
+                + " password : " + password;
     }
+
+    @PostMapping("/login_check")
+    @ResponseBody
+    public String handleLogin(
+        @RequestParam String username,
+        @RequestParam String password,
+        HttpServletResponse res
+        ){
+
+            User user = userRepository.findByUsername(username);
+            if(user != null && user.getPassword().equals(password)){
+                String sessionToken = UUID.randomUUID().toString();
+
+                Cookie sessionCookie =  new Cookie("userSession", username + "-" + sessionToken);
+                sessionCookie.setHttpOnly(true);
+                sessionCookie.setMaxAge(3600);
+                sessionCookie.setPath("/");
+
+                res.addCookie(sessionCookie);
+
+                return "Login successful!";
+
+            }else{
+                return "InValid Credentials!!";
+            }
+        }
 }
