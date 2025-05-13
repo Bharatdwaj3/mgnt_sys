@@ -26,11 +26,11 @@ public class User {
     }
 
     public String getEmail() {
-        return password;
+        return email;
     }
 
     public String getPassword() {
-        return email;
+        return password;
     }
 
     public boolean isCompleted() {
